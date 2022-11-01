@@ -7,42 +7,42 @@
 import Foundation
 
 // MARK: - Eunbin Seo
+enum Roman : Int {
+    case I = 1
+    case V = 5
+    case X = 10
+    case L = 50
+    case C = 100
+    case D = 500
+    case M = 1000
+    
+    static func toRoman(_ char: Character) -> Int {
+        // static - cannot be used as an instance member
+        switch char {
+        case "I" : return I.rawValue
+        case "V" : return V.rawValue
+        case "X" : return X.rawValue
+        case "L" : return L.rawValue
+        case "C" : return C.rawValue
+        case "D" : return D.rawValue
+        case "M" : return M.rawValue
+        default : return 0
+        }
+    }
+} 
+
 class Solution {
-    func longestCommonPrefix(_ strs: [String]) -> String {
-        
-        // 1. 배열 중 가장 짧은 단어를 찾는다.
-        var shortestString = ""
-        var ssCnt = 200
-        var resString = ""
-        
-        if(strs.count == 1) {
-            return strs[0]
+    var total = 0 
+    var beforeNum = 1001
+    // 변수 선언 위치가 전역인지 지역인지 차이로 약간 차이가 있네요? 
+    func romanToInt(_ s: String) -> Int {
+        s.reversed()
+        for i in s {
+            let hey = Roman.toRoman(i)
+            total += hey
+            if (beforeNum < hey) { total -= beforeNum * 2 }
+            beforeNum = hey
         }
-        
-        for i in strs {
-           if(i.count > 0 && i.count <= ssCnt) { 
-               ssCnt = i.count 
-               shortestString = i
-           }
-        }
-        
-        // 2. 그 문자의 순서대로 완탐 ㅎ..
-        
-        for j in shortestString {
-            var res = 0
-            var compareString = resString + String(j)
-            
-           for i in strs {
-              if(i.hasPrefix(compareString)){ 
-                res += 1    
-              }
-              
-               if (res == strs.count) { 
-                resString += String(j) 
-              }
-           }      
-        }
-        
-        return resString
+        return total
     }
 }
